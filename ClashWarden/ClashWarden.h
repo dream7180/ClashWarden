@@ -23,6 +23,9 @@ public:
 // 重写
 public:
 	virtual BOOL InitInstance();
+	CString path;
+	int tunmode;
+	CString iniFile;
 
 // 实现
 

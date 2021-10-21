@@ -7,6 +7,7 @@
 #define IDD_DIALOG_Main                 130
 #define IDD_DIALOG_Option               132
 #define IDD_DIALOG_About                133
+#define IDD_DIALOG_Subscribe            136
 #define IDC_TAB1                        1000
 #define IDC_BTNStart                    1003
 #define IDC_CTun                        1004
@@ -19,14 +20,15 @@
 #define IDC_TStatus                     1009
 #define IDC_TCfgTime                    1010
 #define IDC_TIPTime                     1011
+#define IDC_Homepage                    1012
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        136
+#define _APS_NEXT_RESOURCE_VALUE        138
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1012
+#define _APS_NEXT_CONTROL_VALUE         1013
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

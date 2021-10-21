@@ -10,8 +10,8 @@
 
 
 // CPage_Main 对话框
-CString path;
 COLORREF m_color;
+CClashWardenApp* app = (CClashWardenApp*)AfxGetApp();
 
 IMPLEMENT_DYNAMIC(CPage_Main, CDialogEx)
 
@@ -23,11 +23,13 @@ CPage_Main::CPage_Main(CWnd* pParent /*=nullptr*/)
 
 CPage_Main::~CPage_Main()
 {
+	WritePrivateProfileString(L"General", L"TunMode", app->tunmode?L"1":L"0", app->iniFile);
 }
 
 void CPage_Main::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
+	DDX_Check(pDX, IDC_CTun, app->tunmode);
 }
 
 
@@ -38,6 +40,7 @@ BEGIN_MESSAGE_MAP(CPage_Main, CDialogEx)
 	ON_BN_CLICKED(IDC_BTNCfg, &CPage_Main::OnBnClickedBtncfg)
 	ON_BN_CLICKED(IDC_BTNIP, &CPage_Main::OnBnClickedBtnip)
 	ON_BN_CLICKED(IDC_BTNConsole, &CPage_Main::OnBnClickedBtnconsole)
+	ON_BN_CLICKED(IDC_CTun, &CPage_Main::OnBnClickedCtun)
 END_MESSAGE_MAP()
 
 
@@ -46,14 +49,11 @@ END_MESSAGE_MAP()
 BOOL CPage_Main::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
-	GetModuleFileName(NULL, path.GetBufferSetLength(MAX_PATH + 1), MAX_PATH);
-	path.ReleaseBuffer();
-	int pos = path.ReverseFind('\\');
-	path = path.Left(pos);
 	m_color = RGB(255, 255, 0);
 	ClashStatus();
 	ClashDataTime(true);
 	ClashDataTime(false);
+	UpdateData(FALSE);
 	return TRUE;
 }
 
@@ -152,7 +152,7 @@ void CPage_Main::ClashDataTime(bool isIP)
 	CString systemdate = tm.Format("%Y-%m-%d");
 	CString modtime = L"0000-00-00-00, 00:00:00";
 	if (isIP) {
-		CFile::GetStatus(path + L"\\profile\\Country.mmdb", status);
+		CFile::GetStatus(app->path + L"\\profile\\Country.mmdb", status);
 		CString moddate = status.m_mtime.Format("%Y-%m-%d");
 		if (systemdate == moddate)
 		{
@@ -165,7 +165,7 @@ void CPage_Main::ClashDataTime(bool isIP)
 	}
 	else
 	{
-		CFile::GetStatus(path + L"\\profile\\config.yaml", status);
+		CFile::GetStatus(app->path + L"\\profile\\config.yaml", status);
 		CString moddate = status.m_mtime.Format("%Y-%m-%d");
 		if (systemdate == moddate)
 		{
@@ -181,8 +181,15 @@ void CPage_Main::ClashDataTime(bool isIP)
 void CPage_Main::OnBnClickedBtnstart()
 {
 	KillProcessFromName(L"clash.exe");
-	CString runpath = path;
-	runpath += _T("\\app\\startclash.vbs");
+	CString runpath = app->path;
+	if (app->tunmode)
+	{
+		runpath += _T("\\bin\\startclashtun.vbs");
+	}
+	else
+	{
+		runpath += _T("\\bin\\startclash.vbs");
+	}
 	ShellExecute(NULL, _T("open"), runpath, NULL, 0, 0);
 	Sleep(250);
 	ClashStatus();
@@ -281,7 +288,7 @@ void CPage_Main::OnBnClickedBtnstop()
 
 void CPage_Main::OnBnClickedBtncfg()
 {
-	CString runpath = path;
+	CString runpath = app->path;
 	runpath += _T("\\config\\yamlupdate.bat");
 	ExecuteBat(runpath, false);
 }
@@ -289,7 +296,7 @@ void CPage_Main::OnBnClickedBtncfg()
 
 void CPage_Main::OnBnClickedBtnip()
 {
-	CString runpath = path;
+	CString runpath = app->path;
 	runpath += _T("\\config\\geoipupdate.bat");
 	ExecuteBat(runpath, true);
 }
@@ -298,4 +305,10 @@ void CPage_Main::OnBnClickedBtnip()
 void CPage_Main::OnBnClickedBtnconsole()
 {
 	ShellExecuteW(NULL, L"open", L"http://127.0.0.1:9090/ui/#/proxies", NULL, NULL, SW_SHOWNORMAL);
+}
+
+
+void CPage_Main::OnBnClickedCtun()
+{
+	UpdateData(TRUE);
 }

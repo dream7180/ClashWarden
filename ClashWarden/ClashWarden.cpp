@@ -23,8 +23,13 @@ END_MESSAGE_MAP()
 
 CClashWardenApp::CClashWardenApp()
 {
-	// TODO: 在此处添加构造代码，
 	// 将所有重要的初始化放置在 InitInstance 中
+	GetModuleFileName(NULL, path.GetBufferSetLength(MAX_PATH + 1), MAX_PATH);
+	path.ReleaseBuffer();
+	int pos = path.ReverseFind('\\');
+	path = path.Left(pos);
+	iniFile = path + L"\\ClashWarden.ini";
+	tunmode = GetPrivateProfileInt(L"General", L"TunMode", 0, iniFile);
 }
 
 

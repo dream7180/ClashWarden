@@ -34,4 +34,5 @@ public:
 	afx_msg void OnBnClickedBtncfg();
 	afx_msg void OnBnClickedBtnip();
 	afx_msg void OnBnClickedBtnconsole();
+	afx_msg void OnBnClickedCtun();
 };

@@ -4,6 +4,7 @@
 
 #pragma once
 #include "CPage_Main.h"
+#include "CPage_Subscribe.h"
 #include "CPage_Option.h"
 #include "CPage_About.h"
 
@@ -21,8 +22,9 @@ public:
 
 	protected:
 	CPage_Main m_Page1;
-	CPage_Option m_Page2;
-	CPage_About m_Page3;
+	CPage_Subscribe m_Page2;
+	CPage_Option m_Page3;
+	CPage_About m_Page4;
 	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV 支持
 
 
@@ -38,4 +40,5 @@ protected:
 public:
 	afx_msg void OnTcnSelchangeTab1(NMHDR* pNMHDR, LRESULT* pResult);
 	CTabCtrl m_Tab;
+	afx_msg void OnBnClickedCancel();
 };
