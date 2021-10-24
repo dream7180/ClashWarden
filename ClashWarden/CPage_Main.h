@@ -35,4 +35,5 @@ public:
 	afx_msg void OnBnClickedBtnip();
 	afx_msg void OnBnClickedBtnconsole();
 	afx_msg void OnBnClickedCtun();
+	afx_msg void OnBnClickedCsysproxy();
 };

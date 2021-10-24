@@ -24,12 +24,14 @@ CPage_Main::CPage_Main(CWnd* pParent /*=nullptr*/)
 CPage_Main::~CPage_Main()
 {
 	WritePrivateProfileString(L"General", L"TunMode", app->tunmode?L"1":L"0", app->iniFile);
+	WritePrivateProfileString(L"General", L"SysProxy", app->sysproxy ? L"1" : L"0", app->iniFile);
 }
 
 void CPage_Main::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Check(pDX, IDC_CTun, app->tunmode);
+	DDX_Check(pDX, IDC_CSysproxy, app->sysproxy);
 }
 
 
@@ -41,6 +43,7 @@ BEGIN_MESSAGE_MAP(CPage_Main, CDialogEx)
 	ON_BN_CLICKED(IDC_BTNIP, &CPage_Main::OnBnClickedBtnip)
 	ON_BN_CLICKED(IDC_BTNConsole, &CPage_Main::OnBnClickedBtnconsole)
 	ON_BN_CLICKED(IDC_CTun, &CPage_Main::OnBnClickedCtun)
+	ON_BN_CLICKED(IDC_CSysproxy, &CPage_Main::OnBnClickedCsysproxy)
 END_MESSAGE_MAP()
 
 
@@ -311,4 +314,32 @@ void CPage_Main::OnBnClickedBtnconsole()
 void CPage_Main::OnBnClickedCtun()
 {
 	UpdateData(TRUE);
+}
+
+
+void CPage_Main::OnBnClickedCsysproxy()
+{
+	UpdateData(TRUE);
+	CRegKey SetReg;
+	LPCTSTR ps = L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Internet Settings";
+	LONG lResult = SetReg.Open(HKEY_CURRENT_USER, ps, KEY_ALL_ACCESS);
+	if (ERROR_SUCCESS == lResult)
+	{
+		if (app->sysproxy) {
+			lResult = SetReg.SetStringValue(L"ProxyServer", L"127.0.0.1:7890");
+			if (ERROR_SUCCESS != lResult)
+			{
+				AfxMessageBox(L"注册表写入失败！");
+			}
+			else {
+				SetReg.SetDWORDValue(L"ProxyEnable", 1);
+			}
+		}
+		else
+		{
+			SetReg.SetDWORDValue(L"ProxyEnable", 0);
+		}
+	}
+	else AfxMessageBox(L"注册表打开失败！");
+	SetReg.Close();
 }

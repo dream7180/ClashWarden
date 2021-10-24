@@ -30,6 +30,8 @@ CClashWardenApp::CClashWardenApp()
 	path = path.Left(pos);
 	iniFile = path + L"\\ClashWarden.ini";
 	tunmode = GetPrivateProfileInt(L"General", L"TunMode", 0, iniFile);
+	startup = GetPrivateProfileInt(L"General", L"Startup", 0, iniFile);
+	sysproxy = GetPrivateProfileInt(L"General", L"SysProxy", 0, iniFile);
 }
 
 
@@ -69,7 +71,7 @@ BOOL CClashWardenApp::InitInstance()
 	// 更改用于存储设置的注册表项
 	// TODO: 应适当修改该字符串，
 	// 例如修改为公司或组织名
-	SetRegistryKey(_T("应用程序向导生成的本地应用程序"));
+	//SetRegistryKey(_T("应用程序向导生成的本地应用程序"));
 
 	CClashWardenDlg dlg;
 	m_pMainWnd = &dlg;

@@ -26,6 +26,8 @@ public:
 	CString path;
 	int tunmode;
 	CString iniFile;
+	int startup;
+	int sysproxy;
 
 // 实现
 
