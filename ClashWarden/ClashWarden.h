@@ -28,10 +28,11 @@ public:
 	CString iniFile;
 	int startup;
 	int sysproxy;
+	int subscribe;
 
 // 实现
 
-	DECLARE_MESSAGE_MAP()
+	DECLARE_MESSAGE_MAP();
 };
 
 extern CClashWardenApp theApp;

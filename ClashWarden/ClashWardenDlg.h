@@ -8,6 +8,8 @@
 #include "CPage_Option.h"
 #include "CPage_About.h"
 
+#define WM_TASKMESSAGE  WM_USER+1
+
 // CClashWardenDlg 对话框
 class CClashWardenDlg : public CDialogEx
 {
@@ -31,14 +33,21 @@ public:
 // 实现
 protected:
 	HICON m_hIcon;
+	NOTIFYICONDATA nid;
 
 	// 生成的消息映射函数
+	void setTray();
 	virtual BOOL OnInitDialog();
+	afx_msg void OnSysCommand(UINT id, LPARAM lParam);
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
+	afx_msg LRESULT OnTaskMessage(WPARAM wParam, LPARAM lParam);
+	afx_msg void OnShow();
+	afx_msg void OnClose();
 	DECLARE_MESSAGE_MAP()
 public:
 	afx_msg void OnTcnSelchangeTab1(NMHDR* pNMHDR, LRESULT* pResult);
 	CTabCtrl m_Tab;
 	afx_msg void OnBnClickedCancel();
+	afx_msg void OnDestroy();
 };

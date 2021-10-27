@@ -1,3 +1,6 @@
+@echo off
+%1 mshta vbscript:CreateObject("Shell.Application").ShellExecute("cmd.exe","/c %~s0 ::","","runas",1)(window.close)&&exit
+cd /d "%~dp0"
 echo # This is a sample HOSTS file used by Microsoft TCP/IP for Windows. > C:\WINDOWS\system32\drivers\etc\hosts
 echo # >> C:\WINDOWS\system32\drivers\etc\hosts
 echo #	127.0.0.1       localhost >> C:\WINDOWS\system32\drivers\etc\hosts

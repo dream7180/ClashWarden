@@ -36,4 +36,5 @@ public:
 	afx_msg void OnBnClickedBtnconsole();
 	afx_msg void OnBnClickedCtun();
 	afx_msg void OnBnClickedCsysproxy();
+	afx_msg void OnStnDblclickTstatus();
 };

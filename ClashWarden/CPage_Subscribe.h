@@ -17,10 +17,13 @@ public:
 #endif
 
 protected:
+	BOOL resetURL;
+	VOID getSubsSection(const CString ini_section);
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 支持
 
 	DECLARE_MESSAGE_MAP()
 public:
 	virtual BOOL OnInitDialog();
 	CListCtrl m_Subs;
+	afx_msg void OnitemSelChange(NMHDR* pNMHDR, LRESULT* pResult);
 };

@@ -23,8 +23,11 @@ CPage_Main::CPage_Main(CWnd* pParent /*=nullptr*/)
 
 CPage_Main::~CPage_Main()
 {
-	WritePrivateProfileString(L"General", L"TunMode", app->tunmode?L"1":L"0", app->iniFile);
-	WritePrivateProfileString(L"General", L"SysProxy", app->sysproxy ? L"1" : L"0", app->iniFile);
+	CString inivalue;
+	inivalue.Format(L"%d", app->tunmode);
+	WritePrivateProfileString(L"General", L"TunMode", inivalue, app->iniFile);
+	inivalue.Format(L"%d", app->sysproxy);
+	WritePrivateProfileString(L"General", L"SysProxy", inivalue, app->iniFile);
 }
 
 void CPage_Main::DoDataExchange(CDataExchange* pDX)
@@ -44,6 +47,7 @@ BEGIN_MESSAGE_MAP(CPage_Main, CDialogEx)
 	ON_BN_CLICKED(IDC_BTNConsole, &CPage_Main::OnBnClickedBtnconsole)
 	ON_BN_CLICKED(IDC_CTun, &CPage_Main::OnBnClickedCtun)
 	ON_BN_CLICKED(IDC_CSysproxy, &CPage_Main::OnBnClickedCsysproxy)
+	ON_STN_DBLCLK(IDC_TStatus, &CPage_Main::OnStnDblclickTstatus)
 END_MESSAGE_MAP()
 
 
@@ -342,4 +346,10 @@ void CPage_Main::OnBnClickedCsysproxy()
 	}
 	else AfxMessageBox(L"注册表打开失败！");
 	SetReg.Close();
+}
+
+
+void CPage_Main::OnStnDblclickTstatus()
+{
+	ClashStatus();
 }

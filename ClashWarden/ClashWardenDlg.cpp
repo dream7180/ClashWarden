@@ -33,6 +33,12 @@ BEGIN_MESSAGE_MAP(CClashWardenDlg, CDialogEx)
 	ON_WM_QUERYDRAGICON()
 	ON_NOTIFY(TCN_SELCHANGE, IDC_TAB1, &CClashWardenDlg::OnTcnSelchangeTab1)
 	ON_BN_CLICKED(IDCANCEL, &CClashWardenDlg::OnBnClickedCancel)
+	ON_MESSAGE(WM_TASKMESSAGE, OnTaskMessage)
+	ON_COMMAND(ID_SHOW, OnShow)
+	ON_COMMAND(ID_CLOSE, OnClose)
+	ON_WM_SYSCOMMAND()
+	ON_COMMAND(SC_MINIMIZE, setTray)
+	ON_WM_DESTROY()
 END_MESSAGE_MAP()
 
 
@@ -168,4 +174,73 @@ void CClashWardenDlg::OnBnClickedCancel()
 {
 	// TODO: 在此添加控件通知处理程序代码
 	CDialogEx::OnCancel();
+}
+
+
+
+void CClashWardenDlg::OnSysCommand(UINT nID, LPARAM lParam)
+{
+	if (nID == SC_MINIMIZE)
+	{
+		setTray();//最小化到托盘
+	}else CDialogEx::OnSysCommand(nID, lParam);
+}
+
+
+LRESULT CClashWardenDlg::OnTaskMessage(WPARAM wParam, LPARAM lParam)
+{
+	switch (lParam)
+	{
+	case WM_LBUTTONUP://如果在图标上发生鼠标左键消息，则显示窗口，删除托盘图标
+		ShowWindow(SW_SHOW);
+		Shell_NotifyIcon(NIM_DELETE, &nid);
+		break;
+	case WM_RBUTTONUP:
+		CMenu popmenu;
+		POINT point;
+		::GetCursorPos(&point);//获取当前鼠标的位置
+		popmenu.CreatePopupMenu();//创建一个弹出式菜单
+		popmenu.AppendMenu(MF_STRING, ID_SHOW, L"显示 Clash Warden");
+		popmenu.AppendMenu(MF_STRING, ID_CLOSE, L"关闭");//添加两个菜单项
+		SetForegroundWindow(); //这句话的作用是当弹出菜单失去焦点自动消失
+		popmenu.TrackPopupMenu(TPM_LEFTBUTTON, point.x, point.y, this);//显示弹出式菜单
+
+		popmenu.Detach();
+
+		break;
+	}
+	return 0;
+}
+
+void CClashWardenDlg::OnShow()
+{
+	// TODO: 在此添加命令处理程序代码
+	ShowWindow(SW_SHOW);
+	Shell_NotifyIcon(NIM_DELETE, &nid);
+}
+
+void CClashWardenDlg::OnClose()
+{
+	// TODO: 在此添加命令处理程序代码
+	CDialogEx::OnCancel();
+}
+
+void CClashWardenDlg::setTray()
+{
+	nid.cbSize = (DWORD)sizeof(NOTIFYICONDATA);
+	nid.hWnd = this->m_hWnd;
+	nid.uID = IDR_MAINFRAME;
+	nid.uFlags = NIF_ICON | NIF_MESSAGE | NIF_TIP;
+	nid.uCallbackMessage = WM_TASKMESSAGE;//自定义的消息名称 
+	nid.hIcon = m_hIcon;// LoadIcon(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDR_MAINFRAME));
+	Shell_NotifyIcon(NIM_ADD, &nid); //在托盘区添加图标 
+	ShowWindow(SW_HIDE); //隐藏主窗
+}
+
+
+void CClashWardenDlg::OnDestroy()
+{
+	CDialogEx::OnDestroy();
+
+	Shell_NotifyIcon(NIM_DELETE, &nid);
 }

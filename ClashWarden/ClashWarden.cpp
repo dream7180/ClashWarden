@@ -32,6 +32,7 @@ CClashWardenApp::CClashWardenApp()
 	tunmode = GetPrivateProfileInt(L"General", L"TunMode", 0, iniFile);
 	startup = GetPrivateProfileInt(L"General", L"Startup", 0, iniFile);
 	sysproxy = GetPrivateProfileInt(L"General", L"SysProxy", 0, iniFile);
+	subscribe = GetPrivateProfileInt(L"General", L"SubscribeSN", 1, iniFile);
 }
 
 
@@ -44,6 +45,37 @@ CClashWardenApp theApp;
 
 BOOL CClashWardenApp::InitInstance()
 {
+	HANDLE m_hMutex = CreateMutex(NULL, TRUE, _T("Clash Warden"));
+	if (m_hMutex == NULL)
+	{
+		return FALSE;
+	}
+
+	//如果程序已经存在并且正在运行
+	if (GetLastError() == ERROR_ALREADY_EXISTS)
+		{
+			HWND hProgramWnd = ::FindWindow(NULL, L"Clash Warden");
+			if (hProgramWnd)
+			{
+				WINDOWPLACEMENT * pWndpl = NULL;
+				WINDOWPLACEMENT   wpm;
+				pWndpl = &wpm;
+				GetWindowPlacement(hProgramWnd, &wpm);
+				if (pWndpl)
+					{
+				//将运行的程序窗口还原成正常状态
+						pWndpl->showCmd = SW_SHOWNORMAL;
+						::SetWindowPlacement(hProgramWnd, pWndpl);
+						SetWindowPos(hProgramWnd, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
+						FlashWindow(hProgramWnd, TRUE);//任务栏图标闪烁
+					}
+				}
+	//关闭进程互斥体
+	CloseHandle(m_hMutex);
+	m_hMutex = NULL;
+	return FALSE;
+	 }
+
 	// 如果一个运行在 Windows XP 上的应用程序清单指定要
 	// 使用 ComCtl32.dll 版本 6 或更高版本来启用可视化方式，
 	//则需要 InitCommonControlsEx()。  否则，将无法创建窗口。
@@ -106,4 +138,3 @@ BOOL CClashWardenApp::InitInstance()
 	//  而不是启动应用程序的消息泵。
 	return FALSE;
 }
-

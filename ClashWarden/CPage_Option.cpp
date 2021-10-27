@@ -5,6 +5,7 @@
 #include "ClashWarden.h"
 #include "CPage_Option.h"
 #include "afxdialogex.h"
+#include <io.h>
 
 // CPage_Option 对话框
 CClashWardenApp* app2 = (CClashWardenApp*)AfxGetApp();
@@ -19,7 +20,9 @@ CPage_Option::CPage_Option(CWnd* pParent /*=nullptr*/)
 
 CPage_Option::~CPage_Option()
 {
-	WritePrivateProfileString(L"General", L"Startup", app2->startup ? L"1" : L"0", app2->iniFile);
+	CString inivalue;
+	inivalue.Format(L"%d", app2->startup);
+	WritePrivateProfileString(L"General", L"Startup", inivalue, app2->iniFile);
 }
 
 void CPage_Option::DoDataExchange(CDataExchange* pDX)
@@ -45,15 +48,15 @@ BOOL CPage_Option::OnInitDialog()
 }
 
 void CPage_Option::OnBnClickedBtnstartup()
-{
+{/*
 	CRegKey SetReg;
 	LPCTSTR ps = L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run";
 	LONG lResult = SetReg.Open(HKEY_LOCAL_MACHINE, ps, KEY_ALL_ACCESS);
 	if (ERROR_SUCCESS == lResult)
 	{
 		if(app2->tunmode)
-			lResult = SetReg.SetStringValue(L"Clash", app2->path + L"\\bin\\startclashtun.vbs");
-		else lResult = SetReg.SetStringValue(L"Clash", app2->path + L"\\bin\\startclash.vbs");
+			lResult = SetReg.SetStringValue(L"Clash", app2->path + L"\\bin\\startuptun.vbs");
+		else lResult = SetReg.SetStringValue(L"Clash", app2->path + L"\\bin\\startup.vbs");
 		if (ERROR_SUCCESS != lResult)
 		{
 			AfxMessageBox(L"注册表写入失败！");
@@ -66,11 +69,32 @@ void CPage_Option::OnBnClickedBtnstartup()
 	}
 	else AfxMessageBox(L"注册表打开失败！");
 	SetReg.Close();
+	*/
+	TCHAR link[MAX_PATH];
+	TCHAR link_name[MAX_PATH] = L"\\startClash.lnk";
+	CString filename;
+	filename = app2->tunmode ? L"\\bin\\startuptun.vbs" : L"\\bin\\startup.vbs";
+
+	LPITEMIDLIST pidl;
+
+	if (SUCCEEDED(SHGetSpecialFolderLocation(NULL, CSIDL_STARTUP, &pidl)))
+	{
+		SHGetPathFromIDList(pidl, link);
+		wcscat_s(link, link_name);
+		if ((_waccess(link, 0)) == -1) {
+			if (SUCCEEDED(CreateLink(app2->path + filename, link, app2->path + L"\\bin")))
+			{
+				app2->startup = 1;
+				UpdateData(FALSE);
+			}
+		}
+	}
 }
 
 
 void CPage_Option::OnBnClickedBtnnostartup()
 {
+	/*
 	CRegKey SetReg;
 	LPCTSTR ps = L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run";
 	LONG lResult = SetReg.Open(HKEY_LOCAL_MACHINE, ps, KEY_ALL_ACCESS);
@@ -94,5 +118,51 @@ void CPage_Option::OnBnClickedBtnnostartup()
 	}
 	else AfxMessageBox(L"注册表打开失败！");
 	SetReg.Close();
+	*/
+
+	LPITEMIDLIST pidl;
+	TCHAR link[MAX_PATH];
+	TCHAR link_name[MAX_PATH] = L"\\startClash.lnk";
+	BOOL ret = 0;
+
+	if (SUCCEEDED(SHGetSpecialFolderLocation(NULL, CSIDL_STARTUP, &pidl)))
+	{
+		SHGetPathFromIDList(pidl, link);
+		wcscat_s(link, link_name);
+		if ((_waccess(link, 0)) == 0) {
+			ret = DeleteFile(link);
+			if(ret)
+			{
+				app2->startup = 0;
+				UpdateData(FALSE);
+			}
+		}
+	}
 }
 
+HRESULT CPage_Option::CreateLink(LPCTSTR lpszPathObj, LPCTSTR lpszPathLink, LPCTSTR lpszLocation)
+{
+	HRESULT hres;
+	IShellLink* psl;
+
+	hres = CoInitialize(NULL);
+	hres = CoCreateInstance(CLSID_ShellLink, NULL, CLSCTX_INPROC_SERVER, IID_IShellLink, (LPVOID*)&psl);
+
+	if (SUCCEEDED(hres)) {
+		IPersistFile* ppf;
+
+		psl->SetPath(lpszPathObj);
+		psl->SetWorkingDirectory(lpszLocation);
+		hres = psl->QueryInterface(IID_IPersistFile, (void**)&ppf);
+		if (SUCCEEDED(hres)) {
+			//WCHAR wsz[MAX_PATH];
+
+			//MultiByteToWideChar(CP_ACP, 0, lpszPathLink, -1, wsz, MAX_PATH);
+			hres = ppf->Save(lpszPathLink, TRUE);
+			ppf->Release();
+		}
+		psl->Release();
+	}
+
+	return hres;
+}

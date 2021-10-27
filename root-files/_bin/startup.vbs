@@ -1,0 +1,1 @@
+CreateObject("WScript.Shell").Run "clash.exe -d ..\profile -f ..\profile\config.yaml",0
