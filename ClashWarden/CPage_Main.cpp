@@ -198,7 +198,7 @@ void CPage_Main::OnBnClickedBtnstart()
 		runpath += _T("\\bin\\startclash.vbs");
 	}
 	ShellExecute(NULL, _T("open"), runpath, NULL, 0, 0);
-	Sleep(250);
+	Sleep(500);
 	ClashStatus();
 }
 
@@ -288,7 +288,7 @@ HBRUSH CPage_Main::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
 void CPage_Main::OnBnClickedBtnstop()
 {
 	KillProcessFromName(L"clash.exe");
-	Sleep(300);
+	Sleep(500);
 	ClashStatus();
 }
 

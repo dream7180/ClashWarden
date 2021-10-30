@@ -217,7 +217,9 @@
     <None Include="res\ClashWarden.rc2" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="res\bitmap2.bmp" />
     <Image Include="res\ClashWarden.ico" />
+    <Image Include="res\cn.bmp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

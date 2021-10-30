@@ -56,7 +56,7 @@ BOOL CClashWardenDlg::OnInitDialog()
 	m_Tab.InsertItem(0, L"控制中心  ");
 	m_Tab.InsertItem(1, L"服务器订阅  ");
 	m_Tab.InsertItem(2, L"设置选项  ");
-	m_Tab.InsertItem(3, L"关于  ");
+	m_Tab.InsertItem(3, L"帮助说明  ");
 
 	m_Page1.Create(IDD_DIALOG_Main, GetDlgItem(IDC_TAB1));
 	m_Page2.Create(IDD_DIALOG_Subscribe, GetDlgItem(IDC_TAB1));

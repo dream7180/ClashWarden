@@ -88,6 +88,11 @@ void CPage_Option::OnBnClickedBtnstartup()
 				UpdateData(FALSE);
 			}
 		}
+		else if(app2->startup == 0)
+		{
+			app2->startup = 1;
+			UpdateData(FALSE);
+		}
 	}
 }
 
@@ -136,6 +141,10 @@ void CPage_Option::OnBnClickedBtnnostartup()
 				app2->startup = 0;
 				UpdateData(FALSE);
 			}
+		}
+		else if(app2->startup == 1){
+			app2->startup = 0;
+			UpdateData(FALSE);
 		}
 	}
 }

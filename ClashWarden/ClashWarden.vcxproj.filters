@@ -83,5 +83,11 @@
     <Image Include="res\ClashWarden.ico">
       <Filter>资源文件</Filter>
     </Image>
+    <Image Include="res\cn.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="res\bitmap2.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
   </ItemGroup>
 </Project>

@@ -8,6 +8,7 @@
 #define IDD_DIALOG_Option               132
 #define IDD_DIALOG_About                133
 #define IDD_DIALOG_Subscribe            136
+#define IDB_BITMAP1                     138
 #define IDC_TAB1                        1000
 #define IDC_BTNStart                    1003
 #define IDC_CTun                        1004
@@ -39,9 +40,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        138
+#define _APS_NEXT_RESOURCE_VALUE        140
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1025
+#define _APS_NEXT_CONTROL_VALUE         1026
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

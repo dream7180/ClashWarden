@@ -12,7 +12,7 @@
 
 IMPLEMENT_DYNAMIC(CPage_Subscribe, CDialogEx)
 
-CStringArray  UrlNames;
+CStringArray  UrlNames, UrlKey;
 CClashWardenApp* app3 = (CClashWardenApp*)AfxGetApp();
 
 CPage_Subscribe::CPage_Subscribe(CWnd* pParent /*=nullptr*/)
@@ -29,6 +29,7 @@ CPage_Subscribe::~CPage_Subscribe()
 	if (resetURL) {
 		WritePrivateProfileString(L"Subscription", L"oslook(github)", L"https://raw.githubusercontent.com/oslook/clash-freenode/main/clash.yaml", app3->iniFile);
 		WritePrivateProfileString(L"Subscription", L"oslook(cdn)", L"https://cdn.jsdelivr.net/gh/oslook/clash-freenode@master/clash.yaml", app3->iniFile);
+		WritePrivateProfileString(L"Subscription", L"ermaozi", L"https://raw.githubusercontent.com/ermaozi/get_subscribe/main/subscribe/clash.yml", app3->iniFile);
 	}
 }
 
@@ -61,7 +62,9 @@ BOOL CPage_Subscribe::OnInitDialog()
 	m_Subs.SetColumnWidth(1, (int)(rect.Width() * 0.75));
 
 	getSubsSection(L"Subscription");
-	m_Subs.SetCheck(app3->subscribe, true);
+	if (app3->subscribe > -1) {
+		m_Subs.SetCheck(app3->subscribe, true);
+	}
 
 
 	return TRUE;  // return TRUE unless you set the focus to a control
@@ -75,14 +78,45 @@ VOID CPage_Subscribe::getSubsSection(const CString ini_section)
 	CString tempStr2, strKey, strValue;
 	GetPrivateProfileSection(ini_section, Section, MAX_SECTION, app3->iniFile);
 	if (Section[0] == '\0') {
-		m_Subs.InsertItem(0, L"oslook(github)");
-		m_Subs.SetItemText(0, 0, L"oslook(github)");
-		m_Subs.SetItemText(0, 1, L"https://raw.githubusercontent.com/oslook/clash-freenode/main/clash.yaml");
-		m_Subs.InsertItem(1, L"oslook(cdn)");
-		m_Subs.SetItemText(1, 0, L"oslook(cdn)");
-		m_Subs.SetItemText(1, 1, L"https://cdn.jsdelivr.net/gh/oslook/clash-freenode@master/clash.yaml");
-		resetURL = true;
 		UrlNames.Add(L"oslook(github)");
+		UrlNames.Add(L"oslook(cdn)");
+		UrlNames.Add(L"ermaozi");
+		UrlKey.Add(L"https://raw.githubusercontent.com/oslook/clash-freenode/main/clash.yaml");
+		UrlKey.Add(L"https://cdn.jsdelivr.net/gh/oslook/clash-freenode@master/clash.yaml");
+		UrlKey.Add(L"https://raw.githubusercontent.com/ermaozi/get_subscribe/main/subscribe/clash.yml");
+		m_Subs.InsertItem(0, UrlNames[0]);
+		m_Subs.SetItemText(0, 0, UrlNames[0]);
+		m_Subs.SetItemText(0, 1, UrlKey[0]);
+		m_Subs.InsertItem(1, UrlNames[1]);
+		m_Subs.SetItemText(1, 0, UrlNames[1]);
+		m_Subs.SetItemText(1, 1, UrlKey[1]);
+		m_Subs.InsertItem(2, UrlNames[2]);
+		m_Subs.SetItemText(2, 0, UrlNames[2]);
+		m_Subs.SetItemText(2, 1, UrlKey[2]);
+		resetURL = true;
+		CFile fileR(app3->path + _T("\\config\\subscription"), CFile::modeRead);
+		BYTE head[3];
+		fileR.Read(head, 3);
+		if (!(head[0] == 0xEF && head[1] == 0xBB && head[2] == 0xBF))
+		{
+			fileR.SeekToBegin();
+		}
+		ULONGLONG FileSize = fileR.GetLength();
+		char* pContent = (char*)calloc(FileSize + 1, sizeof(char));
+		fileR.Read(pContent, (UINT)FileSize);
+		fileR.Close();
+		int n = MultiByteToWideChar(CP_UTF8, 0, pContent, (int)FileSize + 1, NULL, 0);
+		wchar_t* pWideChar = (wchar_t*)calloc(n + 1, sizeof(wchar_t));
+		MultiByteToWideChar(CP_UTF8, 0, pContent, (int)FileSize + 1, pWideChar, n);
+		CString UrlFile = CString(pWideChar);
+		free(pContent);
+		free(pWideChar);
+		for (int j = 0; j < 3; j++)
+		{
+			if (UrlKey[j] == UrlFile) {
+				app3->subscribe = j;
+			}
+		}
 	}
 	else
 	{
@@ -138,8 +172,13 @@ void CPage_Subscribe::OnitemSelChange(NMHDR* pNMHDR, LRESULT* pResult)
 		app3->subscribe = pNMLV->iItem;
 		m_Subs.SetCheck(_nTemp, false);
 		CString urlstr;
-		GetPrivateProfileString(L"Subscription", UrlNames[app3->subscribe],L"", urlstr.GetBufferSetLength(MAX_PATH), MAX_PATH, app3->iniFile);
-		urlstr.ReleaseBuffer();
+		if (resetURL) {
+			urlstr = UrlKey[app3->subscribe];
+		}
+		else {
+			GetPrivateProfileString(L"Subscription", UrlNames[app3->subscribe], L"", urlstr.GetBufferSetLength(MAX_PATH), MAX_PATH, app3->iniFile);
+			urlstr.ReleaseBuffer();
+		}
 		CFile file(app3->path + _T("\\config\\subscription"), CFile::modeWrite | CFile::modeCreate);
 		
 		//预转换，得到所需空间的大小，这次用的函数和上面名字相反 
