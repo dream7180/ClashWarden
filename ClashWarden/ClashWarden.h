@@ -29,6 +29,7 @@ public:
 	int startup;
 	int sysproxy;
 	int subscribe;
+	int upwproxy;
 
 // 实现
 

@@ -36,7 +36,7 @@ END_MESSAGE_MAP()
 
 
 // CPage_About 消息处理程序
-CString CPage_About::ReadAppVersion(bool including_build)
+CString CPage_About::ReadAppVersion()
 {
 	CString version;
 
@@ -47,17 +47,10 @@ CString CPage_About::ReadAppVersion(bool including_build)
 		VS_FIXEDFILEINFO* ver = (VS_FIXEDFILEINFO*)((BYTE*)::LockResource(global) + 0x28);
 		if (ver->dwSignature == 0xfeef04bd)
 		{
-			//if (including_build)
-				//version.Format(_T("Version %d.%u.%u Build %u %s"),
-			version.Format(_T("Version %d.%u %s Build"),
+			version.Format(_T("Version %d.%u.%u Build %u\r\n%s"),
 				(int)HIWORD(ver->dwProductVersionMS), (int)LOWORD(ver->dwProductVersionMS),
-				//(int)HIWORD(ver->dwProductVersionLS), (int)LOWORD(ver->dwProductVersionLS),
+				(int)HIWORD(ver->dwProductVersionLS), (int)LOWORD(ver->dwProductVersionLS),
 				sizeof(TCHAR) == 1 ? _T("ASCII") : _T("Unicode"));
-			//else
-				//version.Format(_T("Version %d.%u.%u\n%s Build"),
-					//(int)HIWORD(ver->dwProductVersionMS), (int)LOWORD(ver->dwProductVersionMS),
-					//(int)HIWORD(ver->dwProductVersionLS),
-					//sizeof(TCHAR) == 1 ? _T("ASCII") : _T("Unicode"));
 		}
 		::FreeResource(global);
 	}
@@ -77,7 +70,7 @@ BOOL CPage_About::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
 	CString version_;
-	version_ = L"Clash Warden\r\n" + ReadAppVersion(true) + L"\r\nx64 Release";
+	version_ = L"Clash Warden\r\n" + ReadAppVersion() + L", x64 Release";
 	GetDlgItem(IDC_Version)->SetWindowText(version_);
 
 	return TRUE;  // return TRUE unless you set the focus to a control

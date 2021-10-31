@@ -33,6 +33,7 @@ CClashWardenApp::CClashWardenApp()
 	startup = GetPrivateProfileInt(L"General", L"Startup", 0, iniFile);
 	sysproxy = GetPrivateProfileInt(L"General", L"SysProxy", 0, iniFile);
 	subscribe = GetPrivateProfileInt(L"General", L"SubscribeSN", -1, iniFile);
+	upwproxy = GetPrivateProfileInt(L"General", L"yamlWithProxy", 0, iniFile);
 }
 
 

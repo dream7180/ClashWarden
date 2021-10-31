@@ -28,6 +28,8 @@ CPage_Main::~CPage_Main()
 	WritePrivateProfileString(L"General", L"TunMode", inivalue, app->iniFile);
 	inivalue.Format(L"%d", app->sysproxy);
 	WritePrivateProfileString(L"General", L"SysProxy", inivalue, app->iniFile);
+	inivalue.Format(L"%d", app->upwproxy);
+	WritePrivateProfileString(L"General", L"yamlWithProxy", inivalue, app->iniFile);
 }
 
 void CPage_Main::DoDataExchange(CDataExchange* pDX)
@@ -35,6 +37,7 @@ void CPage_Main::DoDataExchange(CDataExchange* pDX)
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Check(pDX, IDC_CTun, app->tunmode);
 	DDX_Check(pDX, IDC_CSysproxy, app->sysproxy);
+	DDX_Check(pDX, IDC_CwProxy, app->upwproxy);
 }
 
 
@@ -48,6 +51,7 @@ BEGIN_MESSAGE_MAP(CPage_Main, CDialogEx)
 	ON_BN_CLICKED(IDC_CTun, &CPage_Main::OnBnClickedCtun)
 	ON_BN_CLICKED(IDC_CSysproxy, &CPage_Main::OnBnClickedCsysproxy)
 	ON_STN_DBLCLK(IDC_TStatus, &CPage_Main::OnStnDblclickTstatus)
+	ON_BN_CLICKED(IDC_CwProxy, &CPage_Main::OnBnClickedCwproxy)
 END_MESSAGE_MAP()
 
 
@@ -246,6 +250,8 @@ BOOL CPage_Main::ExecuteBat(CString strCmd, bool isIP)
 		if (result == WAIT_OBJECT_0 + 1)
 		{
 			//响应windows消息
+			if(isIP) GetDlgItem(IDC_TIPTime)->SetWindowTextW(L"正在更新, 请稍候...");
+			else GetDlgItem(IDC_TCfgTime)->SetWindowTextW(L"正在更新, 请稍候...");
 			PeekMessage(&msg, NULL, 0, 0, PM_REMOVE);
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
@@ -296,7 +302,12 @@ void CPage_Main::OnBnClickedBtnstop()
 void CPage_Main::OnBnClickedBtncfg()
 {
 	CString runpath = app->path;
-	runpath += _T("\\config\\yamlupdate.bat");
+	if (app->upwproxy) {
+		runpath += _T("\\config\\yamlupdate.bat");
+	}
+	else {
+		runpath += _T("\\config\\yamlupdatep.bat");
+	}
 	ExecuteBat(runpath, false);
 }
 
@@ -352,4 +363,10 @@ void CPage_Main::OnBnClickedCsysproxy()
 void CPage_Main::OnStnDblclickTstatus()
 {
 	ClashStatus();
+}
+
+
+void CPage_Main::OnBnClickedCwproxy()
+{
+	UpdateData(TRUE);
 }
