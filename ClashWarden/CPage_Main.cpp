@@ -209,6 +209,7 @@ void CPage_Main::OnBnClickedBtnstart()
 BOOL CPage_Main::ExecuteBat(CString strCmd, bool isIP)
 {
 	ASSERT(strCmd != NULL);
+	int runflag = 0;
 
 	STARTUPINFO si;
 	PROCESS_INFORMATION pi;
@@ -250,11 +251,17 @@ BOOL CPage_Main::ExecuteBat(CString strCmd, bool isIP)
 		if (result == WAIT_OBJECT_0 + 1)
 		{
 			//响应windows消息
-			if(isIP) GetDlgItem(IDC_TIPTime)->SetWindowTextW(L"正在更新, 请稍候...");
-			else GetDlgItem(IDC_TCfgTime)->SetWindowTextW(L"正在更新, 请稍候...");
-			PeekMessage(&msg, NULL, 0, 0, PM_REMOVE);
-			TranslateMessage(&msg);
-			DispatchMessage(&msg);
+			if (runflag == 0)
+			{
+				if (isIP) GetDlgItem(IDC_TIPTime)->SetWindowTextW(L"正在更新, 请稍候...");
+				else GetDlgItem(IDC_TCfgTime)->SetWindowTextW(L"正在更新, 请稍候...");
+				runflag = 1;
+			}
+			while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+			{
+				TranslateMessage(&msg);
+				DispatchMessage(&msg);
+			}
 		}
 		else
 		{
@@ -262,6 +269,7 @@ BOOL CPage_Main::ExecuteBat(CString strCmd, bool isIP)
 			//传递了一个无效的句柄(result==WAIT_FAILED) ||
 			//线程等待时间已到(result==WAIT_TIMEOUT) ||
 			//其他情况(...)
+			runflag = 0;
 			break;
 		}
 	}

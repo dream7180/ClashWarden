@@ -70,7 +70,13 @@ BOOL CPage_About::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
 	CString version_;
-	version_ = L"Clash Warden\r\n" + ReadAppVersion() + L", x64 Release";
+	version_ = L"Clash Warden\r\n" + ReadAppVersion() + L", "
+#ifdef _WIN64
+		L"x64"
+#else
+		L"x86"
+#endif
+		L" Release";
 	GetDlgItem(IDC_Version)->SetWindowText(version_);
 
 	return TRUE;  // return TRUE unless you set the focus to a control
