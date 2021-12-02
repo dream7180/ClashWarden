@@ -13,7 +13,7 @@
 #endif
 
 // CClashWardenDlg 对话框
-
+CClashWardenApp* app0 = (CClashWardenApp*)AfxGetApp();
 
 
 CClashWardenDlg::CClashWardenDlg(CWnd* pParent /*=nullptr*/)
@@ -37,7 +37,7 @@ BEGIN_MESSAGE_MAP(CClashWardenDlg, CDialogEx)
 	ON_COMMAND(ID_SHOW, OnShow)
 	ON_COMMAND(ID_CLOSE, OnClose)
 	ON_WM_SYSCOMMAND()
-	ON_COMMAND(SC_MINIMIZE, setTray)
+	//ON_COMMAND(SC_MINIMIZE, setTray)
 	ON_WM_DESTROY()
 END_MESSAGE_MAP()
 
@@ -180,10 +180,15 @@ void CClashWardenDlg::OnBnClickedCancel()
 
 void CClashWardenDlg::OnSysCommand(UINT nID, LPARAM lParam)
 {
-	if (nID == SC_MINIMIZE)
+	if (nID == SC_MINIMIZE && app0->mintotray)
 	{
 		setTray();//最小化到托盘
-	}else CDialogEx::OnSysCommand(nID, lParam);
+	}
+	else if (nID == SC_CLOSE && app0->closetotray)
+	{
+		setTray();
+	} 
+	else CDialogEx::OnSysCommand(nID, lParam);
 }
 
 

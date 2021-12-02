@@ -27,9 +27,10 @@ CPage_Subscribe::~CPage_Subscribe()
 	inivalue.Format(L"%d", app3->subscribe);
 	WritePrivateProfileString(L"General", L"SubscribeSN", inivalue, app3->iniFile);
 	if (resetURL) {
+		WritePrivateProfileString(L"Subscription", L"anaer", L"https://raw.githubusercontent.com/anaer/Sub/main/clash.yaml", app3->iniFile);
 		WritePrivateProfileString(L"Subscription", L"oslook(github)", L"https://raw.githubusercontent.com/oslook/clash-freenode/main/clash.yaml", app3->iniFile);
 		WritePrivateProfileString(L"Subscription", L"oslook(cdn)", L"https://cdn.jsdelivr.net/gh/oslook/clash-freenode@master/clash.yaml", app3->iniFile);
-		WritePrivateProfileString(L"Subscription", L"ermaozi", L"https://raw.githubusercontent.com/ermaozi/get_subscribe/main/subscribe/clash.yml", app3->iniFile);
+		//WritePrivateProfileString(L"Subscription", L"ermaozi", L"https://raw.githubusercontent.com/ermaozi/get_subscribe/main/subscribe/clash.yml", app3->iniFile);
 	}
 }
 
@@ -52,7 +53,7 @@ BOOL CPage_Subscribe::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
 
-	m_Subs.SetExtendedStyle(LVS_EX_GRIDLINES | LVS_EX_FULLROWSELECT | LVS_EX_CHECKBOXES);
+	m_Subs.SetExtendedStyle(LVS_EX_GRIDLINES | LVS_EX_FULLROWSELECT | LVS_EX_CHECKBOXES | LVS_EX_LABELTIP);
 	resetURL = false;
 	CRect rect;
 	GetDlgItem(IDC_LSubs)->GetClientRect(&rect);
@@ -78,12 +79,14 @@ VOID CPage_Subscribe::getSubsSection(const CString ini_section)
 	CString tempStr2, strKey, strValue;
 	GetPrivateProfileSection(ini_section, Section, MAX_SECTION, app3->iniFile);
 	if (Section[0] == '\0') {
+		UrlNames.Add(L"anaer");
 		UrlNames.Add(L"oslook(github)");
 		UrlNames.Add(L"oslook(cdn)");
-		UrlNames.Add(L"ermaozi");
+		//UrlNames.Add(L"ermaozi");
+		UrlKey.Add(L"https://raw.githubusercontent.com/anaer/Sub/main/clash.yaml");
 		UrlKey.Add(L"https://raw.githubusercontent.com/oslook/clash-freenode/main/clash.yaml");
 		UrlKey.Add(L"https://cdn.jsdelivr.net/gh/oslook/clash-freenode@master/clash.yaml");
-		UrlKey.Add(L"https://raw.githubusercontent.com/ermaozi/get_subscribe/main/subscribe/clash.yml");
+		//UrlKey.Add(L"https://raw.githubusercontent.com/ermaozi/get_subscribe/main/subscribe/clash.yml");
 		m_Subs.InsertItem(0, UrlNames[0]);
 		m_Subs.SetItemText(0, 0, UrlNames[0]);
 		m_Subs.SetItemText(0, 1, UrlKey[0]);
@@ -93,6 +96,9 @@ VOID CPage_Subscribe::getSubsSection(const CString ini_section)
 		m_Subs.InsertItem(2, UrlNames[2]);
 		m_Subs.SetItemText(2, 0, UrlNames[2]);
 		m_Subs.SetItemText(2, 1, UrlKey[2]);
+		//m_Subs.InsertItem(3, UrlNames[3]);
+		//m_Subs.SetItemText(3, 0, UrlNames[3]);
+		//m_Subs.SetItemText(3, 1, UrlKey[3]);
 		resetURL = true;
 		CFile fileR(app3->path + _T("\\config\\subscription"), CFile::modeRead);
 		BYTE head[3];
@@ -111,7 +117,7 @@ VOID CPage_Subscribe::getSubsSection(const CString ini_section)
 		CString UrlFile = CString(pWideChar);
 		free(pContent);
 		free(pWideChar);
-		for (int j = 0; j < 3; j++)
+		for (int j = 0; j < UrlKey.GetSize(); j++)
 		{
 			if (UrlKey[j] == UrlFile) {
 				app3->subscribe = j;

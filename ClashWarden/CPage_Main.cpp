@@ -64,7 +64,7 @@ BOOL CPage_Main::OnInitDialog()
 	ClashStatus();
 	ClashDataTime(true);
 	ClashDataTime(false);
-	UpdateData(FALSE);
+	//UpdateData(FALSE);
 	return TRUE;
 }
 

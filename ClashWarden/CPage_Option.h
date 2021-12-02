@@ -25,4 +25,6 @@ protected:
 public:
 	afx_msg void OnBnClickedBtnstartup();
 	afx_msg void OnBnClickedBtnnostartup();
+	afx_msg void OnBnClickedCmin2tray();
+	afx_msg void OnBnClickedCclose2tray();
 };

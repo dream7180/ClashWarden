@@ -15,7 +15,7 @@
 // CClashWardenApp
 
 BEGIN_MESSAGE_MAP(CClashWardenApp, CWinApp)
-	ON_COMMAND(ID_HELP, &CWinApp::OnHelp)
+	//ON_COMMAND(ID_HELP, &CWinApp::OnHelp)
 END_MESSAGE_MAP()
 
 
@@ -34,6 +34,8 @@ CClashWardenApp::CClashWardenApp()
 	sysproxy = GetPrivateProfileInt(L"General", L"SysProxy", 0, iniFile);
 	subscribe = GetPrivateProfileInt(L"General", L"SubscribeSN", -1, iniFile);
 	upwproxy = GetPrivateProfileInt(L"General", L"yamlWithProxy", 0, iniFile);
+	mintotray = GetPrivateProfileInt(L"General", L"MinimizeToTray", 1, iniFile);
+	closetotray = GetPrivateProfileInt(L"General", L"CloseToTray", 1, iniFile);
 }
 
 

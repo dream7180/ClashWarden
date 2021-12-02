@@ -30,6 +30,8 @@ public:
 	int sysproxy;
 	int subscribe;
 	int upwproxy;
+	int mintotray;
+	int closetotray;
 
 // 实现
 

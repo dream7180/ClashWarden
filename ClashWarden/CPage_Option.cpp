@@ -23,18 +23,26 @@ CPage_Option::~CPage_Option()
 	CString inivalue;
 	inivalue.Format(L"%d", app2->startup);
 	WritePrivateProfileString(L"General", L"Startup", inivalue, app2->iniFile);
+	inivalue.Format(L"%d", app2->mintotray);
+	WritePrivateProfileString(L"General", L"MinimizeToTray", inivalue, app2->iniFile);
+	inivalue.Format(L"%d", app2->closetotray);
+	WritePrivateProfileString(L"General", L"CloseToTray", inivalue, app2->iniFile);
 }
 
 void CPage_Option::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Check(pDX, IDC_CStartup, app2->startup);
+	DDX_Check(pDX, IDC_CMin2tray, app2->mintotray);
+	DDX_Check(pDX, IDC_CClose2tray, app2->closetotray);
 }
 
 
 BEGIN_MESSAGE_MAP(CPage_Option, CDialogEx)
 	ON_BN_CLICKED(IDC_BTNStartup, &CPage_Option::OnBnClickedBtnstartup)
 	ON_BN_CLICKED(IDC_BTNnoStartup, &CPage_Option::OnBnClickedBtnnostartup)
+	ON_BN_CLICKED(IDC_CMin2tray, &CPage_Option::OnBnClickedCmin2tray)
+	ON_BN_CLICKED(IDC_CClose2tray, &CPage_Option::OnBnClickedCclose2tray)
 END_MESSAGE_MAP()
 
 
@@ -174,4 +182,16 @@ HRESULT CPage_Option::CreateLink(LPCTSTR lpszPathObj, LPCTSTR lpszPathLink, LPCT
 	}
 
 	return hres;
+}
+
+
+void CPage_Option::OnBnClickedCmin2tray()
+{
+	UpdateData(TRUE);
+}
+
+
+void CPage_Option::OnBnClickedCclose2tray()
+{
+	UpdateData(TRUE);
 }
