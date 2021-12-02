@@ -18,6 +18,7 @@ public:
 
 protected:
 	HRESULT CreateLink(LPCTSTR lpszPathObj, LPCTSTR lpszPathLink, LPCTSTR lpszLocation);
+	bool _ReNameFile(const TCHAR* _pFrom, const TCHAR* _pTo, WORD flags);
 	virtual BOOL OnInitDialog();
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 支持
 
@@ -27,4 +28,7 @@ public:
 	afx_msg void OnBnClickedBtnnostartup();
 	afx_msg void OnBnClickedCmin2tray();
 	afx_msg void OnBnClickedCclose2tray();
+	INT dashboard;
+	afx_msg void OnBnClickedRrazord();
+	afx_msg void OnBnClickedRyacd();
 };

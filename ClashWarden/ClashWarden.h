@@ -32,6 +32,7 @@ public:
 	int upwproxy;
 	int mintotray;
 	int closetotray;
+	int dashboard;
 
 // 实现
 

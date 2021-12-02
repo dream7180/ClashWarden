@@ -39,6 +39,9 @@
 #define IDC_CwProxy                     1026
 #define IDC_CMin2tray                   1026
 #define IDC_CClose2tray                 1027
+#define IDC_RRazord                     1028
+#define IDC_RADIO2                      1029
+#define IDC_RYacd                       1029
 
 // Next default values for new objects
 // 
@@ -46,7 +49,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        140
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1028
+#define _APS_NEXT_CONTROL_VALUE         1030
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

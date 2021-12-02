@@ -36,6 +36,7 @@ CClashWardenApp::CClashWardenApp()
 	upwproxy = GetPrivateProfileInt(L"General", L"yamlWithProxy", 0, iniFile);
 	mintotray = GetPrivateProfileInt(L"General", L"MinimizeToTray", 1, iniFile);
 	closetotray = GetPrivateProfileInt(L"General", L"CloseToTray", 1, iniFile);
+	dashboard = GetPrivateProfileInt(L"General", L"Dashboard", 0, iniFile);
 }
 
 
