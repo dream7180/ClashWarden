@@ -102,5 +102,5 @@ void CPage_About::OnNMClickSyslink3(NMHDR* pNMHDR, LRESULT* pResult)
 
 void CPage_About::OnBnClickedBtnhosts()
 {
-	ShellExecute(NULL, _T("open"), app4->path + L"\\bin\\github-hosts.bat", NULL, 0, SW_SHOW);
+	ShellExecute(NULL, _T("open"), app4->path + L"\\config\\githubhostsupdate.bat", NULL, 0, SW_SHOW);
 }
