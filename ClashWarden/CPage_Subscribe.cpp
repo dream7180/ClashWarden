@@ -31,7 +31,7 @@ CPage_Subscribe::~CPage_Subscribe()
 		WritePrivateProfileString(L"Subscription", L"oslook(github)", L"https://raw.githubusercontent.com/oslook/clash-freenode/main/clash.yaml", app3->iniFile);
 		WritePrivateProfileString(L"Subscription", L"oslook(cdn)", L"https://cdn.jsdelivr.net/gh/oslook/clash-freenode@master/clash.yaml --no-check-certificate", app3->iniFile);
 		WritePrivateProfileString(L"Subscription", L"free9999", L"https://gitlab.com/free9999/ipupdate/-/raw/master/clash/config.yaml --no-check-certificate", app3->iniFile);
-		WritePrivateProfileString(L"Subscription", L"warden", L"https://gitlab.com/warden3/subscription/-/raw/main/config.yaml --no-check-certificate", app3->iniFile);
+		//WritePrivateProfileString(L"Subscription", L"warden", L"https://gitlab.com/warden3/subscription/-/raw/main/config.yaml --no-check-certificate", app3->iniFile);
 	}
 }
 
@@ -84,12 +84,12 @@ VOID CPage_Subscribe::getSubsSection(const CString ini_section)
 		UrlNames.Add(L"oslook(github)");
 		UrlNames.Add(L"oslook(cdn)");
 		UrlNames.Add(L"free9999");
-		UrlNames.Add(L"warden");
+		//UrlNames.Add(L"warden");
 		UrlKey.Add(L"https://raw.githubusercontent.com/anaer/Sub/main/clash.yaml");
 		UrlKey.Add(L"https://raw.githubusercontent.com/oslook/clash-freenode/main/clash.yaml");
 		UrlKey.Add(L"https://cdn.jsdelivr.net/gh/oslook/clash-freenode@master/clash.yaml --no-check-certificate");
 		UrlKey.Add(L"https://gitlab.com/free9999/ipupdate/-/raw/master/clash/config.yaml --no-check-certificate");
-		UrlKey.Add(L"https://gitlab.com/warden3/subscription/-/raw/main/config.yaml --no-check-certificate");
+		//UrlKey.Add(L"https://gitlab.com/warden3/subscription/-/raw/main/config.yaml --no-check-certificate");
 		m_Subs.InsertItem(0, UrlNames[0]);
 		m_Subs.SetItemText(0, 0, UrlNames[0]);
 		m_Subs.SetItemText(0, 1, UrlKey[0]);
@@ -102,9 +102,9 @@ VOID CPage_Subscribe::getSubsSection(const CString ini_section)
 		m_Subs.InsertItem(3, UrlNames[3]);
 		m_Subs.SetItemText(3, 0, UrlNames[3]);
 		m_Subs.SetItemText(3, 1, UrlKey[3]);
-		m_Subs.InsertItem(4, UrlNames[4]);
-		m_Subs.SetItemText(4, 0, UrlNames[4]);
-		m_Subs.SetItemText(4, 1, UrlKey[4]);
+		//m_Subs.InsertItem(4, UrlNames[4]);
+		//m_Subs.SetItemText(4, 0, UrlNames[4]);
+		//m_Subs.SetItemText(4, 1, UrlKey[4]);
 		resetURL = true;
 		CFile fileR(app3->path + _T("\\config\\subscription"), CFile::modeRead);
 		BYTE head[3];
