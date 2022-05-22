@@ -13,7 +13,6 @@ IMPLEMENT_DYNAMIC(CPage_Option, CDialogEx)
 
 CPage_Option::CPage_Option(CWnd* pParent /*=nullptr*/)
 	: CDialogEx(IDD_DIALOG_Option, pParent)
-	, dashboard(app2->dashboard)
 {
 
 }
@@ -28,8 +27,8 @@ CPage_Option::~CPage_Option()
 	WritePrivateProfileString(L"General", L"MinimizeToTray", inivalue, app2->iniFile);
 	inivalue.Format(L"%d", app2->closetotray);
 	WritePrivateProfileString(L"General", L"CloseToTray", inivalue, app2->iniFile);
-	inivalue.Format(L"%d", dashboard);
-	WritePrivateProfileString(L"General", L"Dashboard", inivalue, app2->iniFile);
+	//inivalue.Format(L"%d", dashboard);
+	//WritePrivateProfileString(L"General", L"Dashboard", inivalue, app2->iniFile);
 }
 
 void CPage_Option::DoDataExchange(CDataExchange* pDX)
@@ -38,8 +37,6 @@ void CPage_Option::DoDataExchange(CDataExchange* pDX)
 	DDX_Check(pDX, IDC_CStartup, app2->startup);
 	DDX_Check(pDX, IDC_CMin2tray, app2->mintotray);
 	DDX_Check(pDX, IDC_CClose2tray, app2->closetotray);
-	DDX_Radio(pDX, IDC_RRazord, dashboard);
-	DDV_MinMaxInt(pDX, dashboard, 0, 1);
 }
 
 
@@ -48,8 +45,6 @@ BEGIN_MESSAGE_MAP(CPage_Option, CDialogEx)
 	ON_BN_CLICKED(IDC_BTNnoStartup, &CPage_Option::OnBnClickedBtnnostartup)
 	ON_BN_CLICKED(IDC_CMin2tray, &CPage_Option::OnBnClickedCmin2tray)
 	ON_BN_CLICKED(IDC_CClose2tray, &CPage_Option::OnBnClickedCclose2tray)
-	ON_BN_CLICKED(IDC_RRazord, &CPage_Option::OnBnClickedRrazord)
-	ON_BN_CLICKED(IDC_RYacd, &CPage_Option::OnBnClickedRyacd)
 END_MESSAGE_MAP()
 
 
@@ -214,38 +209,4 @@ void CPage_Option::OnBnClickedCmin2tray()
 void CPage_Option::OnBnClickedCclose2tray()
 {
 	UpdateData(TRUE);
-}
-
-
-void CPage_Option::OnBnClickedRrazord()
-{
-	if (dashboard == 0) return;
-	dashboard = 0;
-	bool rel = _ReNameFile(app2->path + L"\\profile\\Dashboard", app2->path + L"\\profile\\Yacd", FOF_NOCONFIRMATION|FOF_SILENT);
-	if (!rel) {
-		AfxMessageBox(L"操作不成功！请检查 profile 目录是否存在 dashboard 文件夹");
-		return;
-	}
-	rel = _ReNameFile(app2->path + L"\\profile\\Razord", app2->path + L"\\profile\\Dashboard", FOF_NOCONFIRMATION | FOF_SILENT);
-	if (!rel) {
-		AfxMessageBox(L"操作不成功！请检查 profile 目录是否存在 Razord 文件夹");
-		return;
-	}
-}
-
-
-void CPage_Option::OnBnClickedRyacd()
-{
-	if (dashboard == 1) return;
-	dashboard = 1;
-	bool rel = _ReNameFile(app2->path + L"\\profile\\Dashboard", app2->path + L"\\profile\\Razord", FOF_NOCONFIRMATION | FOF_SILENT);
-	if (!rel) {
-		AfxMessageBox(L"操作不成功！请检查 profile 目录是否存在 Dashboard 文件夹");
-		return;
-	}
-	rel = _ReNameFile(app2->path + L"\\profile\\Yacd", app2->path + L"\\profile\\Dashboard", FOF_NOCONFIRMATION | FOF_SILENT);
-	if (!rel) {
-		AfxMessageBox(L"操作不成功！请检查 profile 目录是否存在 Yacd 文件夹");
-		return;
-	}
 }
