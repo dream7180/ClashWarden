@@ -27,9 +27,9 @@ CPage_Subscribe::~CPage_Subscribe()
 	inivalue.Format(L"%d", app3->subscribe);
 	WritePrivateProfileString(L"General", L"SubscribeSN", inivalue, app3->iniFile);
 	if (resetURL) {
+		WritePrivateProfileString(L"Subscription", L"vveg26", L"https://raw.githubusercontent.com/vveg26/getProxy/main/dist/clash.config.yaml", app3->iniFile);
 		WritePrivateProfileString(L"Subscription", L"anaer", L"https://raw.githubusercontent.com/anaer/Sub/main/clash.yaml", app3->iniFile);
-		WritePrivateProfileString(L"Subscription", L"oslook", L"https://raw.githubusercontent.com/oslook/clash-freenode/main/clash.yaml", app3->iniFile);
-		WritePrivateProfileString(L"Subscription", L"free9999", L"https://gitlab.com/free9999/ipupdate/-/raw/master/clash/config.yaml --no-check-certificate", app3->iniFile);
+		WritePrivateProfileString(L"Subscription", L"Ermaozi", L"https://raw.githubusercontent.com/ermaozi/get_subscribe/main/subscribe/clash.yml", app3->iniFile);
 	}
 }
 
@@ -78,12 +78,12 @@ VOID CPage_Subscribe::getSubsSection(const CString ini_section)
 	CString tempStr2, strKey, strValue;
 	GetPrivateProfileSection(ini_section, Section, MAX_SECTION, app3->iniFile);
 	if (Section[0] == '\0') {
+		UrlNames.Add(L"vveg26");
 		UrlNames.Add(L"anaer");
-		UrlNames.Add(L"oslook");
-		UrlNames.Add(L"free9999");
+		UrlNames.Add(L"Ermaozi");
+		UrlKey.Add(L"https://raw.githubusercontent.com/vveg26/getProxy/main/dist/clash.config.yaml");
 		UrlKey.Add(L"https://raw.githubusercontent.com/anaer/Sub/main/clash.yaml");
-		UrlKey.Add(L"https://raw.githubusercontent.com/oslook/clash-freenode/main/clash.yaml");
-		UrlKey.Add(L"https://gitlab.com/free9999/ipupdate/-/raw/master/clash/config.yaml --no-check-certificate");
+		UrlKey.Add(L"https://raw.githubusercontent.com/ermaozi/get_subscribe/main/subscribe/clash.yml");
 		m_Subs.InsertItem(0, UrlNames[0]);
 		m_Subs.SetItemText(0, 0, UrlNames[0]);
 		m_Subs.SetItemText(0, 1, UrlKey[0]);
