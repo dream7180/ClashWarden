@@ -32,7 +32,7 @@ CClashWardenApp::CClashWardenApp()
 	tunmode = GetPrivateProfileInt(L"General", L"TunMode", 0, iniFile);
 	startup = GetPrivateProfileInt(L"General", L"Startup", 0, iniFile);
 	sysproxy = GetPrivateProfileInt(L"General", L"SysProxy", 0, iniFile);
-	subscribe = GetPrivateProfileInt(L"General", L"SubscribeSN", -1, iniFile);
+	//subscribe = GetPrivateProfileInt(L"General", L"SubscribeSN", -1, iniFile);
 	upwproxy = GetPrivateProfileInt(L"General", L"yamlWithProxy", 0, iniFile);
 	mintotray = GetPrivateProfileInt(L"General", L"MinimizeToTray", 1, iniFile);
 	closetotray = GetPrivateProfileInt(L"General", L"CloseToTray", 1, iniFile);

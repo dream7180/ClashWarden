@@ -28,7 +28,7 @@ public:
 	CString iniFile;
 	int startup;
 	int sysproxy;
-	int subscribe;
+	//int subscribe;
 	int upwproxy;
 	int mintotray;
 	int closetotray;
